@@ -36,13 +36,12 @@ char map[SIZE_MAP][SIZE_MAP]=                       //mapa
 int main()
 {
     int score = 0;
-    int*scr;
-    scr = &score;
+
     int lives = 3;
 
     bool play = true;                   //zmienna petli gry
 
-    int speed = 1000;
+    int speed = 50;
 
     while (play==true)
     {
@@ -52,6 +51,7 @@ int main()
         {
             std::cout<<map[y]<<std::endl;
         }
+
         std::cout<<std::endl<<"SCORE: "<<score<<std::endl<<"LIVES: "<<lives<<std::endl;
 
 
@@ -70,8 +70,6 @@ int main()
                     int move1 = GetAsyncKeyState(VK_LEFT);
                     int move2 = GetAsyncKeyState(VK_RIGHT);
 
-                    int move3 = GetAsyncKeyState(VK_DOWN);
-
                     if (move1 < 0 && map[y][x-1] != '@' )
                     {
                         map[y][x]=' ';
@@ -82,11 +80,6 @@ int main()
                         map[y][x]=' ';
                         map[y][x+1]='X';
                     }
-                    if (move3 < 0)
-                    {
-                        scr++;
-                    }
-
                     break;
 
                 }
@@ -110,24 +103,27 @@ int main()
                             map[y-1][x]='*';
                         }
                     }
+
                 }
+
                 if (map[y][x]=='*' && map[y-1][x]!='@' && map[y-1][x]!='Y')       //petla pocisku
                 {
                     map[y][x]=' ';
                     map[y-1][x]='*';
                 }
-
-                else (map[y][x]=='*' && map[y-1][x]=='Y')       //kolizja + punkt NIE DZIALA
+                else if (map[y][x]=='*' && map[y-1][x]=='Y')       //kolizja + punkt NIE DZIALA
+                {
+                    map[y-1][x]=' ';
+                    map[y][x]=' ';
+                   score=score+1;
+                }
+                else if (map[y][x]=='*' && map[y-1][x]=='@')       //pocisk na koncu mapy
                 {
                     map[y][x]=' ';
-                    map[y-1][x]=' ';
-
-                    scr++;
                 }
+
             }
         }
-
-        //CEL TRAFIONY
 
         //WROG STRZAL
 
@@ -135,7 +131,7 @@ int main()
 
         //WYGRANA & PRZEGRANA
 
-        //ZLICZANIE PUNKTOW, ZYCIE
+
     Sleep(speed);
     }
 
